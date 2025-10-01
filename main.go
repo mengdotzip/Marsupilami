@@ -40,6 +40,9 @@ func main() {
 		case "history":
 			viewHistory()
 			continue
+		case "current":
+			fmt.Println(code.String())
+			continue
 		default:
 			code.WriteString(line + "\n")
 		}
