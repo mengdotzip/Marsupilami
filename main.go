@@ -27,6 +27,12 @@ func main() {
 		line, _ := reader.ReadString('\n')
 		line = strings.TrimSpace(line)
 
+		if strings.HasPrefix(line, "cmd'") && strings.HasSuffix(line, "'") {
+			command := line[4 : len(line)-1] // Extract between cmd' and '
+			runShellCommand(command)
+			continue
+		}
+
 		switch line {
 		case "exit":
 			return
@@ -57,6 +63,23 @@ func appendHistory(code string) {
 func viewHistory() {
 	for i, histr := range codeHistory {
 		fmt.Printf("Index:%v\nCode:\n%vTimestamp:%v\n\n", i, histr.code, histr.timeStamp)
+	}
+}
+
+func runShellCommand(command string) {
+	parts := strings.Fields(command)
+	if len(parts) == 0 {
+		fmt.Println("Empty command")
+		return
+	}
+
+	cmd := exec.Command(parts[0], parts[1:]...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	err := cmd.Run()
+	if err != nil {
+		fmt.Printf("Command failed: %v\n", err)
 	}
 }
 
