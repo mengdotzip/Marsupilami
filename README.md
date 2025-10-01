@@ -51,3 +51,9 @@ fmt.Println(y)
 Timestamp:2025-10-01 17:38:16.30717469 +0200 CEST m=+16.838390291
 MSPL ambrose@RedWitch:~/Code/Marsupilami$ 
 ```
+You can also run executable without adding them to the code
+```
+MSPL ambrose@RedWitch:~/Code/Marsupilami$ cmd'ls'
+go.mod	go.sum	LICENSE  main.go  marsupilami  README.md
+```
+**Note** you need to wrap the command in cmd'COMMAND'
