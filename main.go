@@ -7,7 +7,15 @@ import (
 	"os/exec"
 	"os/user"
 	"strings"
+	"time"
 )
+
+type history struct {
+	code      string
+	timeStamp time.Time
+}
+
+var codeHistory []history
 
 func main() {
 	fmt.Println("-=Marsupilami=- write exit to leave")
@@ -19,19 +27,33 @@ func main() {
 		line, _ := reader.ReadString('\n')
 		line = strings.TrimSpace(line)
 
-		if line == "exit" {
-			break
-		}
-
-		if line == "return" {
+		switch line {
+		case "exit":
+			return
+		case "return":
 			if code.Len() > 0 {
+				appendHistory(code.String())
 				runCode(code.String())
 				code.Reset()
 			}
 			continue
+		case "history":
+			viewHistory()
+			continue
+		default:
+			code.WriteString(line + "\n")
 		}
+	}
+}
 
-		code.WriteString(line + "\n")
+func appendHistory(code string) {
+	hs := history{code: code, timeStamp: time.Now()}
+	codeHistory = append(codeHistory, hs)
+}
+
+func viewHistory() {
+	for i, histr := range codeHistory {
+		fmt.Printf("Index:%v\nCode:\n%vTimestamp:%v\n\n", i, histr.code, histr.timeStamp)
 	}
 }
 
